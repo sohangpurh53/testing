@@ -1,0 +1,36 @@
+
+import "./account.zmodel";
+import "./user.zmodel";
+import "./role.zmodel";
+import "./session.zmodel";
+
+import "./ragVector.zmodel"
+
+import "./product.zmodel"; 
+
+import "./transaction.zmodel"; 
+
+import "./chatMessage.zmodel"; 
+
+import "./account.zmodel"; 
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+plugin prisma {
+    provider = '@core/prisma'
+    output = "./../prisma/schema.prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("SERVER_DATABASE_URL")
+}
+
+plugin trpc {
+    provider = '@zenstackhq/trpc'
+    output = "./../src/.marblism/api"
+    generateClientHelpers = ['react']
+    generateModelActions = ['create', 'update', 'delete', 'findMany', 'findFirst', 'findUnique', 'createMany', 'updateMany', 'deleteMany']
+}

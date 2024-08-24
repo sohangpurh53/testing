@@ -1,0 +1,32 @@
+import "./organizationRole.zmodel";
+
+import './organizationRole.zmodel'
+
+import './product.zmodel'
+
+import './transaction.zmodel'
+
+import './chatMessage.zmodel'
+
+import './account.zmodel'
+
+model Organization {
+    id               String             @id @default(uuid())
+    name             String
+    pictureUrl       String?            @default('https://i.imgur.com/BgkFiid.jpeg')
+    
+    stripeCustomerId String?
+    
+    dateCreated      DateTime           @default(now())
+    dateUpdated      DateTime           @updatedAt @default(now())
+    roles            OrganizationRole[]
+
+products    Product[]  @relation("organization")  
+        transactions  Transaction[]  @relation("organization")  
+        chatMessages  ChatMessage[]  @relation("organization")  
+        accounts    Account[]  @relation("organization")  
+
+@@allow('all', auth().roles?[name == 'admin'])
+    @@allow('all', roles?[user == auth() && name == 'owner'])
+    @@allow('read', roles?[user == auth()])
+}
